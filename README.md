@@ -4,14 +4,27 @@ Two [Claude Code](https://docs.claude.com/en/docs/claude-code) skills for studyi
 
 | Skill | What it does |
 |---|---|
-| [`course-ingest`](course-ingest/SKILL.md) | Turns a folder of slide PDFs, transcripts, and practice exams into something Claude can work from cheaply: a searchable per-page text mirror (flagging pages whose formulas/figures are images), an `INDEX.md` contents map, and `CLAUDE.md` reading rules for future sessions. |
-| [`reference-sheet`](reference-sheet/SKILL.md) | Builds a printable, multi-column exam reference sheet (HTML + PDF, KaTeX math, optional cropped slide images) using parallel subagents, one per module, to write, verify, and illustrate each section. Every revision is saved as a new version. |
+| [`course-ingest`](skills/course-ingest/SKILL.md) | Turns a folder of slide PDFs, transcripts, and practice exams into something Claude can work from cheaply: a searchable per-page text mirror (flagging pages whose formulas/figures are images), an `INDEX.md` contents map, and `CLAUDE.md` reading rules for future sessions. |
+| [`reference-sheet`](skills/reference-sheet/SKILL.md) | Builds a printable, multi-column exam reference sheet (HTML + PDF, KaTeX math, optional cropped slide images) using parallel subagents, one per module, to write, verify, and illustrate each section. Every revision is saved as a new version. |
 
 They work best together: run `course-ingest` once per course, then ask for a reference sheet.
 
 ## Install
 
-Clone the repo and copy (or symlink) the skill folders into a `skills/` directory Claude Code reads:
+**As a Claude Code plugin** (installs both skills, updates with `/plugin`):
+
+```
+/plugin marketplace add GalacticQuasar/claude-study-skills
+/plugin install study-skills@claude-study-skills
+```
+
+**With the [`skills`](https://www.npmjs.com/package/skills) CLI:**
+
+```bash
+npx skills add GalacticQuasar/claude-study-skills
+```
+
+**Manually:** clone the repo and copy (or symlink) the skill folders into a `skills/` directory Claude Code reads:
 
 ```bash
 git clone https://github.com/GalacticQuasar/claude-study-skills
@@ -19,14 +32,14 @@ cd claude-study-skills
 
 # Available in every project:
 mkdir -p ~/.claude/skills
-cp -r course-ingest reference-sheet ~/.claude/skills/
+cp -r skills/course-ingest skills/reference-sheet ~/.claude/skills/
 
 # ...or only in one class folder:
 mkdir -p /path/to/class/.claude/skills
-cp -r course-ingest reference-sheet /path/to/class/.claude/skills/
+cp -r skills/course-ingest skills/reference-sheet /path/to/class/.claude/skills/
 ```
 
-Use `ln -s "$PWD/course-ingest" ~/.claude/skills/` instead of `cp -r` if you want `git pull` to update them.
+Use `ln -s "$PWD/skills/course-ingest" ~/.claude/skills/` instead of `cp -r` if you want `git pull` to update them.
 
 ## Usage
 
@@ -56,13 +69,15 @@ The reference sheet template loads KaTeX from a CDN, so building needs network a
 ## Layout
 
 ```
-course-ingest/
-  SKILL.md
-  scripts/make_text_mirror.py   # copied into each project's tools/ folder
-reference-sheet/
-  SKILL.md
-  assets/template.html          # print layout (Letter, N columns, KaTeX)
-  scripts/build.js              # assemble sections → HTML + PDF, report layout problems
-  scripts/shot.sh               # crop a region of a PDF page to PNG
-  references/                   # specs for the write / verify / image subagents
+.claude-plugin/marketplace.json   # plugin marketplace listing (both skills as one plugin)
+skills/
+  course-ingest/
+    SKILL.md
+    scripts/make_text_mirror.py   # copied into each project's tools/ folder
+  reference-sheet/
+    SKILL.md
+    assets/template.html          # print layout (Letter, N columns, KaTeX)
+    scripts/build.js              # assemble sections → HTML + PDF, report layout problems
+    scripts/shot.sh               # crop a region of a PDF page to PNG
+    references/                   # specs for the write / verify / image subagents
 ```
