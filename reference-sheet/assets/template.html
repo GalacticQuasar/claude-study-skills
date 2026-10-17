@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{TITLE}}</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<style>
+  /* Layout knobs: column count, base font size, page margin (keep @page margin in sync with build.js PDF margin). */
+  :root { --cols:2; --font:7.4pt; --ink:#111; --rule:#999; --tint:#f1f1f1; --tip:#fff4d6; --ex:#eef4fb; }
+  @page { size: letter; margin: 0.3in; }
+  * { box-sizing: border-box; }
+  html, body { background:#fff; color:var(--ink); }
+  body { font: var(--font)/1.22 "Helvetica Neue", Arial, sans-serif; margin:0; }
+  .sheet { column-count:var(--cols); column-gap:0.2in; column-rule:0.5px solid var(--rule); }
+  header.top { column-span:all; display:flex; justify-content:space-between; align-items:baseline; gap:8px;
+    border-bottom:1.5px solid var(--ink); margin-bottom:3px; padding-bottom:1px; }
+  header.top h1 { font-size:10pt; margin:0; }
+  header.top span { font-size:6.8pt; }
+  section.mod { margin:0 0 3px; }
+  h2 { font-size:8.6pt; margin:3px 0 2px; padding:1px 3px; background:#222; color:#fff; break-after:avoid; }
+  h3 { font-size:7.8pt; margin:0 0 1px; border-bottom:0.5px solid var(--rule); break-after:avoid; }
+  .box { margin:0 0 3px; padding:1px 0 2px; }
+  p { margin:1px 0; }
+  ul, ol { margin:1px 0; padding-left:11px; }
+  li { margin:0; }
+  .formula { background:var(--tint); padding:1px 3px; margin:2px 0; break-inside:avoid; }
+  .formula .katex-display { margin:1px 0; }
+  .ex { background:var(--ex); border-left:2px solid #4a78b0; padding:1px 3px; margin:2px 0; }
+  .tip { background:var(--tip); border-left:2px solid #c99400; padding:1px 3px; margin:2px 0; }
+  .small { font-size:0.89em; }
+  pre, code { font-family:"DejaVu Sans Mono", Menlo, Consolas, monospace; font-size:0.89em; }
+  pre { line-height:1.15; margin:2px 0; white-space:pre; break-inside:avoid; }
+  table.tbl { border-collapse:collapse; width:100%; margin:2px 0; font-size:0.92em; break-inside:avoid; }
+  table.tbl th, table.tbl td { border:0.5px solid var(--rule); padding:0 2px; vertical-align:top; text-align:left; }
+  table.tbl th { background:var(--tint); }
+  .ex table.tbl { font-size:0.84em; }
+  figure.shot { margin:2px 0; break-inside:avoid; }
+  figure.shot img { display:block; width:100%; margin:0 auto; }
+  figure.shot.w75 img { width:75%; }
+  figure.shot.w50 img { width:50%; }
+  figure.shot figcaption { font-size:0.86em; color:#444; text-align:center; }
+  .pair { display:flex; gap:4px; align-items:flex-start; break-inside:avoid; }
+  .pair figure.shot { flex:1; min-width:0; }
+  .katex { font-size:1.05em; }
+  .katex-display { margin:2px 0; }
+  @media screen { body { max-width:11in; margin:16px auto; padding:0 16px; }
+    @media (max-width:700px) { .sheet { column-count:1; } } }
+</style>
+</head>
+<body>
+<div class="sheet">
+<header class="top"><h1>{{TITLE}}</h1><span>{{SUBTITLE}}</span></header>
+<!--SECTIONS-->
+</div>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    renderMathInElement(document.body, { delimiters: [
+      { left: "\\[", right: "\\]", display: true }, { left: "\\(", right: "\\)", display: false }],
+      throwOnError: false });
+    // Shrink display formulas and tables that are wider than their column (build.js reports them).
+    document.querySelectorAll(".formula").forEach(function (f) {
+      var k = f.querySelector(".katex-display > .katex") || f.querySelector(".katex");
+      if (!k) return;
+      var r = (f.clientWidth - 6) / (f.scrollWidth - 6);
+      if (r < 1) { k.style.fontSize = (Math.max(r, 0.55) * 1.05 * 0.97) + "em"; f.setAttribute("data-shrunk", "1"); }
+    });
+    document.querySelectorAll("table.tbl").forEach(function (t) {
+      var w = t.parentElement.clientWidth, fs = parseFloat(getComputedStyle(t).fontSize), n = 0;
+      while (t.offsetWidth > w + 1 && n++ < 12) { fs *= 0.93; t.style.fontSize = fs + "px"; }
+    });
+    document.body.setAttribute("data-rendered", "1");
+  });
+</script>
+</body>
+</html>
