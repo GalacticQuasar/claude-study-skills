@@ -5,17 +5,18 @@
   },
   "metadata": {
     "description": "Claude Code skills for studying from a course's lecture materials",
-    "version": "1.0.0"
+    "version": "1.1.0"
   },
   "plugins": [
     {
       "name": "study-skills",
-      "description": "Ingest a course's lecture slides and transcripts into a searchable text mirror, then build printable exam reference sheets from them.",
+      "description": "Ingest a course's lecture slides and transcripts into a searchable text mirror, then build printable exam reference sheets and topic study-guide pages from them.",
       "source": "./",
       "strict": false,
       "skills": [
         "./skills/course-ingest",
-        "./skills/reference-sheet"
+        "./skills/reference-sheet",
+        "./skills/teach-me"
       ]
     }
   ]
