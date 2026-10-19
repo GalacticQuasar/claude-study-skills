@@ -112,6 +112,8 @@ Errors slip in when you retype things from slides into captions and prose. Befor
 
 Publish with the Artifact tool: `file_path` is `study-guides/<topic-slug>/index.html`, `root` is that folder, `files` lists the slide paths relative to it, plus a one-word `icon` (e.g. `book`) and a one-sentence `description`. Use the topic as the page `<title>` ("Algorithms on Strings"). Then write the link into `ARTIFACT.md`.
 
+Record the page in `INDEX.md` too, since that's what every later session reads first. Keep a "Study guides" section with one row per page: topic, folder, the deck/slide/lecture range it covers, and the link. Create the section, and a one-line `study-guides/` entry in the index's layout list, the first time. On a revision, update the existing row instead of adding one.
+
 To revise the page later, republish the same `file_path`. From a different session, also pass the link from `ARTIFACT.md` as `url` (after reading the artifact once, as the tool requires), so the link stays the same instead of a new artifact being created.
 
 Then tell the user, briefly:
