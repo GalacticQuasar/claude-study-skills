@@ -53,7 +53,7 @@ Use `ln -s "$PWD/skills/course-ingest" ~/.claude/skills/` instead of `cp -r` if 
 2. Start `claude` in that folder and say something like *"I downloaded the lectures for this class, set them up so we can study."* That runs `course-ingest`, which writes `lectures-text/`, `INDEX.md`, `CLAUDE.md`, and `tools/make_text_mirror.py`.
 3. Ask for a reference sheet, e.g. *"Make me a reference sheet for the midterm, one double-sided page."* Output goes to `reference-sheet/v1/<course>-reference-sheet-v1.pdf`. Asking for changes ("make it 3 columns", "add pictures") creates `v2`, `v3`, … and leaves earlier versions untouched.
 
-4. To learn a topic you missed or want explained, say *"/teach-me algorithms on strings"* or *"I missed the KMP lecture, teach it to me."* You get a link to a private study-guide page. Topics spanning more than about two decks get an offer to split into several pages.
+4. To learn a topic you missed or want explained, say *"/teach-me algorithms on strings"* or *"I missed the KMP lecture, teach it to me."* You get a link to a private study-guide page, and its source is saved in `study-guides/<topic>/` (with the link in `ARTIFACT.md`) so later sessions can revise the same page. Topics spanning more than about two decks get an offer to split into several pages. Courses without transcripts work too; the page is then built from the slides alone.
 
 The skills can also be invoked directly with `/course-ingest`, `/reference-sheet`, and `/teach-me`.
 
