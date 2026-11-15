@@ -106,12 +106,29 @@ Before you write, call the Artifact tool's `quickstart` with `intent: "other"`, 
 **Design**
 - Borrow the deck's own conventions where they carry meaning, for example if the slides colour-code cases (insert blue, delete green, substitute red), reuse those colours in your prose and tables so page and slides read as one.
 - Slide images are white; give them a border so they sit cleanly in dark mode.
+- Write formulas in LaTeX and render them, rather than typing them as plain text with Unicode symbols: `<span class="tex">\frac{a}{a+c}</span>` inline, `<div class="tex-d">…</div>` for display. Render with KaTeX from cdnjs using `output: "mathml"`. The browser draws MathML natively, so this needs no KaTeX stylesheet or font files, which the artifact host blocks. Put this at the end of the page:
+
+  ```html
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+  <script>
+  (function () {
+    if (!window.katex) return;  // the LaTeX source stays visible as a fallback
+    document.querySelectorAll(".tex, .tex-d").forEach(function (el) {
+      var src = el.textContent;
+      try { katex.render(src, el, { output: "mathml", displayMode: el.classList.contains("tex-d"), throwOnError: false }); } catch (e) {}
+    });
+  })();
+  </script>
+  ```
+
+  Write `\gt` and `\lt` instead of `>` and `<` inside the LaTeX. A display formula with a side condition ("classify as 1 if …") is often too wide for a phone, so put the condition on its own line with `\begin{gathered} … \\ … \end{gathered}`.
 
 ## 7. Check, then publish
 
 Errors slip in when you retype things from slides into captions and prose. Before publishing:
 - Reread every caption, formula and example on the page against the slide and your script's output.
 - Check that each Try-it block sits right after the section it tests and that no question relies on material from a later section.
+- If you preview the page locally, add a `<!doctype html>` wrapper first. The page file has none (the host adds it when publishing), and KaTeX refuses to render in quirks mode, so without it every formula shows as raw LaTeX.
 - Take one preview of the page if the session offers a way, fix what it shows, and then publish.
 
 Publish with the Artifact tool: `file_path` is `study-guides/<topic-slug>/index.html`, `root` is that folder, `files` lists the slide paths relative to it, plus a one-word `icon` (e.g. `book`) and a one-sentence `description`. Use the topic as the page `<title>` ("Algorithms on Strings"). Then write the link into `ARTIFACT.md`.
