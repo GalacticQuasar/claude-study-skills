@@ -1,11 +1,11 @@
 ---
 name: teach-me
-description: Build a study-guide web page (a hand-written HTML artifact) that teaches one course topic from the lecture slides and transcripts, in lecture order, with the important slides embedded next to the explanation, verified worked examples, key takeaways, and a self-check quiz. Use when the user says "/teach-me <topic>", or asks to be taught, walked through, or caught up on a lecture topic ("I missed the KMP lecture", "explain dynamic programming like I wasn't in class", "make me a study page for edit distance"), in a course folder set up by course-ingest (an INDEX.md plus a text mirror of the slides). Not for exam reference or cheat sheets; that's the reference-sheet skill.
+description: Build a study-guide web page (a hand-written HTML artifact) that teaches one course topic from the lecture slides and transcripts, in lecture order, with the important slides embedded next to the explanation, verified worked examples, self-check questions placed right after each idea, and key takeaways. Use when the user says "/teach-me <topic>", or asks to be taught, walked through, or caught up on a lecture topic ("I missed the KMP lecture", "explain dynamic programming like I wasn't in class", "make me a study page for edit distance"), in a course folder set up by course-ingest (an INDEX.md plus a text mirror of the slides). Not for exam reference or cheat sheets; that's the reference-sheet skill.
 ---
 
 # Teach me a topic
 
-Turn one topic from a course's slides and lecture transcripts into a page that teaches it to someone who missed class: the lecture's order, a plain explanation of each idea, the slides that carry it shown full-width beside that explanation, then takeaways and a quiz.
+Turn one topic from a course's slides and lecture transcripts into a page that teaches it to someone who missed class: the lecture's order, a plain explanation of each idea, the slides that carry it shown full-width beside that explanation, a few self-check questions right after each idea so the reader practises it while it's fresh, then takeaways.
 
 The argument is the topic, e.g. `/teach-me algorithms on strings`. If none is given, ask which topic.
 
@@ -69,7 +69,7 @@ If a detail is too small to read on a sheet, view that one page at full size.
 Slides have typos, extraction mangles numbers, and a wrong worked example on a study page does real damage. Before any number goes on the page:
 
 - For algorithmic topics, write a short script, `study-guides/<topic-slug>/check.py`, that implements the algorithm, and run it on the slides' own examples. Compare its output with the slide.
-- Use the same script to produce anything you add yourself: a fully filled table the slide only shows in part, a step-by-step trace, quiz answers.
+- Use the same script to produce anything you add yourself: a fully filled table the slide only shows in part, a step-by-step trace, self-check answers.
 - For non-algorithmic topics, recompute every numeric example or derivation you can (arithmetic, formulas, small proofs).
 - Keep a list of slide typos and discrepancies you find. They get flagged on the page where the slide appears.
 
@@ -85,15 +85,18 @@ This writes `slides/sNN.png` as 48-colour PNGs (about 35 KB each and still sharp
 
 ## 6. Write the page
 
-The output is always a **hand-written HTML page published with the Artifact tool**, not a Docs document, a Slides deck, or any other artifact type, even though "study guide" sounds like a document. The user chose this format. It is the only one that gives full control over the parts that make the page teach: full-width slide images beside the prose, colour-coded tables and traces, and quiz answers hidden behind `<details>` toggles.
+The output is always a **hand-written HTML page published with the Artifact tool**, not a Docs document, a Slides deck, or any other artifact type, even though "study guide" sounds like a document. The user chose this format. It is the only one that gives full control over the parts that make the page teach: full-width slide images beside the prose, colour-coded tables and traces, and self-check answers hidden behind `<details>` toggles.
 
 Before you write, call the Artifact tool's `quickstart` with `intent: "other"`, and follow the plain-page rules it returns (page skeleton, title, allowed sources, theming, phone width). If it suggests starting from a listed type, don't: this skill's format choice overrides that suggestion. Write the page to `study-guides/<topic-slug>/index.html`.
 
 **Structure**
 - Header: topic name, deck and lecture numbers, a one-sentence summary, and a small table of contents linking each part.
 - One section per idea, in the order the lecture covered them. Each section follows the same pattern: explain the idea plainly (as if to someone who missed class), embed the slide full-width, then a caption that says what to notice on it ("Slide 18 · Horizontal step = insert, diagonal = substitute"). A caption that just repeats the slide title adds nothing.
-- Callout boxes for: in-class moments (questions asked and their answers, analogies), exam hints, and the tables or traces you computed yourself.
-- End with **key takeaways** (a short list per part) and a **self-check quiz**: around 10–12 questions mixing recall, "run the algorithm on this input" traces, and one or two variations in the lecturer's style. Hide each answer behind a `<details>` toggle so the user tries first.
+- Callout boxes for: in-class moments (analogies, what the lecturer stressed), exam hints, and the tables or traces you computed yourself.
+- **Self-check questions go inside the lecture, not at the end.** Close each section with a short "Try it" block, so the reader learns an idea and immediately uses it while it's fresh. Write questions that make sense for this lecture and this idea: whatever would show the reader whether they actually understood it. Hide each answer behind a `<details>` toggle so the reader tries first, and number questions continuously across the page so they can be referred to.
+  - If the lecture asked a question in class at this point, it belongs here, with the answer given in class hidden like the others.
+  - Questions can build on earlier sections, but never on something not yet taught.
+- End with **key takeaways** (a short list per part). If some problems only make sense once several sections are done, add a short **"Putting it together"** set for them; don't repeat the per-section questions there.
 
 **Labelling**
 - Mark anything you made that isn't on the slides ("computed for this guide").
@@ -108,6 +111,7 @@ Before you write, call the Artifact tool's `quickstart` with `intent: "other"`, 
 
 Errors slip in when you retype things from slides into captions and prose. Before publishing:
 - Reread every caption, formula and example on the page against the slide and your script's output.
+- Check that each Try-it block sits right after the section it tests and that no question relies on material from a later section.
 - Take one preview of the page if the session offers a way, fix what it shows, and then publish.
 
 Publish with the Artifact tool: `file_path` is `study-guides/<topic-slug>/index.html`, `root` is that folder, `files` lists the slide paths relative to it, plus a one-word `icon` (e.g. `book`) and a one-sentence `description`. Use the topic as the page `<title>` ("Algorithms on Strings"). Then write the link into `ARTIFACT.md`.

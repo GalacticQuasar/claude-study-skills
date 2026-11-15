@@ -6,7 +6,7 @@ Three [Claude Code](https://docs.claude.com/en/docs/claude-code) skills for stud
 |---|---|
 | [`course-ingest`](skills/course-ingest/SKILL.md) | Turns a folder of slide PDFs, transcripts, and practice exams into something Claude can work from cheaply: a searchable per-page text mirror (flagging pages whose formulas/figures are images), an `INDEX.md` contents map (including a running list of confirmed slide errors), and `CLAUDE.md` reading rules for future sessions. |
 | [`reference-sheet`](skills/reference-sheet/SKILL.md) | Builds a printable, multi-column exam reference sheet (HTML + PDF, KaTeX math, optional cropped slide images) using parallel subagents, one per module, to write and illustrate each section, then verifies the calculation-heavy ones. It asks up front about page limit, columns, subagent model (e.g. Sonnet, to cut token use), and images. Every revision is saved as a new version. |
-| [`teach-me`](skills/teach-me/SKILL.md) | Builds a study-guide web page (a hand-written HTML artifact) that teaches one topic in lecture order, as if to someone who missed class: plain explanations with the key slides embedded beside them, worked examples checked by running code, lecturer's exam hints, key takeaways, and a self-check quiz. |
+| [`teach-me`](skills/teach-me/SKILL.md) | Builds a study-guide web page (a hand-written HTML artifact) that teaches one topic in lecture order, as if to someone who missed class: plain explanations with the key slides embedded beside them, worked examples checked by running code, lecturer's exam hints, self-check questions right after each idea, and key takeaways. |
 
 They work best together: run `course-ingest` once per course, then ask for a reference sheet or a topic study guide.
 
