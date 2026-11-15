@@ -1,6 +1,6 @@
 # Verify spec (template)
 
-Copy this into `<version-dir>/src/VERIFY.md` and fill in the `[brackets]`. Each verifier subagent checks one section with fresh eyes. The writer can't easily catch its own mistakes, and an error on a reference sheet is worse than a gap, because the student will trust it under time pressure.
+Copy this into `<version-dir>/src/VERIFY.md` and fill in the `[brackets]`. Only calculation-heavy sections get a verifier. Each one checks one section with fresh eyes. The writer can't easily catch its own mistakes, and an error on a reference sheet is worse than a gap, because the student will trust it under time pressure.
 
 ---
 
@@ -14,8 +14,9 @@ You're checking one section (an HTML fragment) of a printed exam reference sheet
 3. **Self-containment.** Run
    `grep -n -i -E '\bsl\.|slide|lecture|transcript|in-class|in class|prof|errata|practice|textbook|not on slides|HW[0-9]|week [0-9]' <file>`
    and rewrite every hit that points at course materials, following SPEC.md. Also read each worked example and make sure all its inputs are stated.
-4. **Readability.** Each procedure should be followable step by step under exam pressure. Tighten wordy prose, but don't drop real content.
-5. Build a preview (`node [version-dir]/src/build.js [version-dir] _preview-KEY`), fix any KaTeX errors or overflow in your section, then delete `_preview-KEY.*`.
+4. **Images** (if the section has any). Images were added while writing, before your fixes. For each `<figure>`, view the PNG and compare every visible number and label with the corrected text. If an image now contradicts the sheet (or shows a slide error), re-crop it with `[version-dir]/src/shot.sh` to cut the wrong part out, or remove it. Don't view the image if the section has none.
+5. **Readability.** Each procedure should be followable step by step under exam pressure. Tighten wordy prose, but don't drop real content.
+6. Preview your section (`node [version-dir]/src/build.js [version-dir] _preview-KEY --only KEY`), fix any KaTeX errors or overflow, keep its length ("section layout" line) near where it started unless you were asked to trim, then delete `_preview-KEY.*`.
 
 ## Reply
-List what you fixed (especially any wrong numbers or formulas, with before → after), what you added, and anything you're still unsure about.
+List what you fixed (especially any wrong numbers or formulas, with before → after), what you added, any **slide errors** you confirmed (slide page, what it says, the correct value), and anything you're still unsure about.
