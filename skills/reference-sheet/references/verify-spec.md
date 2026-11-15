@@ -19,4 +19,4 @@ You're checking one section (an HTML fragment) of a printed exam reference sheet
 6. Preview your section (`node [version-dir]/src/build.js [version-dir] _preview-KEY --only KEY`), fix any KaTeX errors or overflow, keep its length ("section layout" line) near where it started unless you were asked to trim, then delete `_preview-KEY.*`.
 
 ## Reply
-List what you fixed (especially any wrong numbers or formulas, with before → after), what you added, any **slide errors** you confirmed (slide page, what it says, the correct value), and anything you're still unsure about.
+List what you fixed (especially any wrong numbers or formulas, with before → after), what you added, any **slide errors** you confirmed (slide page, what it says, the correct value; only wrong numbers, formulas, or facts, not differing notations or valid formula variants), and anything you're still unsure about.

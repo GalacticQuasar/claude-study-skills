@@ -57,4 +57,4 @@ Preview just your section, in the sheet's layout (it writes only the files named
 Fix any KaTeX errors or overflow it reports. Its "section layout" line gives your section's length in printed columns: compare it with your length target and trim or expand. Preview as often as you need. Delete `_preview-KEY.*` when done.
 
 ## Reply
-Reply with the file path, its length from the layout report, a 3–6 line summary of what the section covers, and any doubts: ambiguities you resolved, anything you couldn't verify, anything not from the sources, and any **slide errors** you found (slide page, what it says, the correct value, how you checked).
+Reply with the file path, its length from the layout report, a 3–6 line summary of what the section covers, and any doubts: ambiguities you resolved, anything you couldn't verify, anything not from the sources, and any **slide errors** you found (slide page, what it says, the correct value, how you checked). A slide error is a wrong number, formula, or fact you confirmed by recomputing or against another source; two slides using different but valid notations or formula variants is not one (mention it under doubts instead).
