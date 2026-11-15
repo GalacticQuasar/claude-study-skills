@@ -4,8 +4,8 @@ Three [Claude Code](https://docs.claude.com/en/docs/claude-code) skills for stud
 
 | Skill | What it does |
 |---|---|
-| [`course-ingest`](skills/course-ingest/SKILL.md) | Turns a folder of slide PDFs, transcripts, and practice exams into something Claude can work from cheaply: a searchable per-page text mirror (flagging pages whose formulas/figures are images), an `INDEX.md` contents map, and `CLAUDE.md` reading rules for future sessions. |
-| [`reference-sheet`](skills/reference-sheet/SKILL.md) | Builds a printable, multi-column exam reference sheet (HTML + PDF, KaTeX math, optional cropped slide images) using parallel subagents, one per module, to write, verify, and illustrate each section. Every revision is saved as a new version. |
+| [`course-ingest`](skills/course-ingest/SKILL.md) | Turns a folder of slide PDFs, transcripts, and practice exams into something Claude can work from cheaply: a searchable per-page text mirror (flagging pages whose formulas/figures are images), an `INDEX.md` contents map (including a running list of confirmed slide errors), and `CLAUDE.md` reading rules for future sessions. |
+| [`reference-sheet`](skills/reference-sheet/SKILL.md) | Builds a printable, multi-column exam reference sheet (HTML + PDF, KaTeX math, optional cropped slide images) using parallel subagents, one per module, to write and illustrate each section, then verifies the calculation-heavy ones. It asks up front about page limit, columns, subagent model (e.g. Sonnet, to cut token use), and images. Every revision is saved as a new version. |
 | [`teach-me`](skills/teach-me/SKILL.md) | Builds a study-guide web page (a hand-written HTML artifact) that teaches one topic in lecture order, as if to someone who missed class: plain explanations with the key slides embedded beside them, worked examples checked by running code, lecturer's exam hints, key takeaways, and a self-check quiz. |
 
 They work best together: run `course-ingest` once per course, then ask for a reference sheet or a topic study guide.
@@ -68,7 +68,7 @@ The skills can also be invoked directly with `/course-ingest`, `/reference-sheet
 | `teach-me` | The Artifact tool (publishes the page to claude.ai) | available when signed in to Claude Code with a claude.ai account |
 | `.pptx`/`.docx` slides (optional) | LibreOffice, to convert to PDF | `sudo apt install libreoffice` · `brew install --cask libreoffice` |
 
-The reference sheet template loads KaTeX from a CDN, so building needs network access. The image pass is optional; without ImageMagick, the skill skips it.
+The reference sheet template loads KaTeX from a CDN, so building needs network access. Images are optional (the skill asks); without ImageMagick, it recommends text only.
 
 ## Layout
 
@@ -81,9 +81,9 @@ skills/
   reference-sheet/
     SKILL.md
     assets/template.html          # print layout (Letter, N columns, KaTeX)
-    scripts/build.js              # assemble sections → HTML + PDF, report layout problems
+    scripts/build.js              # assemble sections → HTML + PDF, report layout problems and section lengths (--only KEY previews one section)
     scripts/shot.sh               # crop a region of a PDF page to PNG
-    references/                   # specs for the write / verify / image subagents
+    references/                   # specs for the writer and verifier subagents, plus the images rules
   teach-me/
     SKILL.md
     scripts/slides.sh             # slide contact sheets for picking, compressed PNGs for the page
