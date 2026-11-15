@@ -17,7 +17,7 @@ You produce three things at the top level of the project:
 
 Why this matters: slide decks hide much of their content in images (formulas, tables, worked examples), so text extraction silently loses it. But viewing PDFs visually is costly, and a conversation can only hold so many images. Past that cap, earlier images are silently replaced with `[media removed: request limit]`. The mirror and index let sessions search everything as text and spend visual reads only where they matter.
 
-**Already ingested?** If the project already has `INDEX.md` and a text mirror, don't start over. Rebuild the mirror (`python3 tools/make_text_mirror.py <lecture-folder>`), then update `INDEX.md` for whatever was added or changed, and update `CLAUDE.md` only if something new needs a rule.
+**Already ingested?** If the project already has `INDEX.md` and a text mirror, don't start over. Rebuild the mirror (`python3 tools/make_text_mirror.py <lecture-folder>`), then update `INDEX.md` for whatever was added or changed, and update `CLAUDE.md` only if something new needs a rule. If `INDEX.md` has no "Slide errors" section yet, add it (step 3), along with its line in `CLAUDE.md` (step 4).
 
 ## 1. Find the materials
 
@@ -59,6 +59,18 @@ Read through the mirror (text only, which is cheap) and write `INDEX.md` at the 
 - **Exam hints & spoken questions** (optional; include if the transcripts have any): the times the lecturer said something like "this is the kind of question I ask on the exam", and in-class questions that were asked out loud with no slide or question deck. For each, give the transcript path, an approximate line number, a one-line gist, and the answer if one was given. Search the transcripts for words like "exam", "test", "quiz", "question", and "important" to find candidates, then read the surrounding lines to confirm. Later work, such as building reference sheets or quizzes, relies on this.
 - **Image-heavy content**: the topics whose key formulas or figures are images (from the flagged pages), so a reader knows the text alone won't do for those.
 - **Quirks** you notice: printed slide numbers that don't match PDF pages (check a few decks: compare the numbers printed on slides with the `===== Page N =====` markers), practice exams that cite another semester's slide numbers, duplicate or mislabeled files, obvious slide typos.
+- **Slide errors** (always include this heading, even if empty): wrong numbers or formulas on slides, which later work (reference sheets, teach-me pages, quizzes) adds as it confirms them by recomputation. Use this table, and record only errors that were recomputed or checked against another source, not mere doubts:
+
+  ```markdown
+  ## Slide errors
+
+  Use the correct values; crop these spots out of any slide image.
+
+  | Where | Slide says | Correct | Check |
+  |---|---|---|---|
+  ```
+
+  If you confirm any during ingest (e.g. an obviously wrong worked-example number you recomputed), add them as rows. Otherwise leave the table empty. Spoken slips in transcripts can go in a line below the table.
 
 Keep it factual and scannable. It's a map, not a summary of the course. Write all paths relative to the project folder.
 
@@ -82,9 +94,10 @@ Study materials for [course]. **Read `INDEX.md` first.** It maps every slide dec
 ## Other rules
 - [Optional, only if exam scope is known: excluded topics.]
 - [Quirks worth a reminder, e.g. slide-number offsets.]
+- `INDEX.md` lists known **slide errors** with correct values. Use the correct values, and when you confirm a new error (by recomputing), add a row there.
 ```
 
-Leave out the optional lines, or the whole "Other rules" section, when there's nothing to put there. Don't ask the user for exam details just to fill them in.
+Leave out the optional lines when there's nothing to put there; the slide-errors line always stays, so the "Other rules" section always exists. Don't ask the user for exam details just to fill them in.
 
 The "few decks vs. many lectures" split is the core of the rules: visual reads give complete information but use up the image budget. For one or two decks that's a good trade. Across a whole course it isn't, and the flags show where text-only reading has gaps.
 
