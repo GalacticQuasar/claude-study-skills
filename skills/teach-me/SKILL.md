@@ -106,6 +106,7 @@ Before you write, call the Artifact tool's `quickstart` with `intent: "other"`, 
 **Design**
 - Borrow the deck's own conventions where they carry meaning, for example if the slides colour-code cases (insert blue, delete green, substitute red), reuse those colours in your prose and tables so page and slides read as one.
 - Slide images are white; give them a border so they sit cleanly in dark mode.
+- Make every embedded slide click-to-enlarge, so small text (matrices, tables, node labels) stays readable on a phone. Copy the viewer in `assets/slide-viewer.html` into the page: its `<style>` rules go at the end of the page's style block, and its `<div>` and `<script>` go just before the KaTeX script. It works on every `figure img` and shows the caption's `<b>` label (e.g. "Slide 18") in its top bar, so keep that caption convention. Don't change it per page.
 - Write formulas in LaTeX and render them, rather than typing them as plain text with Unicode symbols: `<span class="tex">\frac{a}{a+c}</span>` inline, `<div class="tex-d">…</div>` for display. Render with KaTeX from cdnjs using `output: "mathml"`. The browser draws MathML natively, so this needs no KaTeX stylesheet or font files, which the artifact host blocks. Put this at the end of the page:
 
   ```html

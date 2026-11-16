@@ -86,5 +86,6 @@ skills/
     references/                   # specs for the writer and verifier subagents, plus the images rules
   teach-me/
     SKILL.md
+    assets/slide-viewer.html      # click-to-enlarge slide viewer pasted into every page
     scripts/slides.sh             # slide contact sheets for picking, compressed PNGs for the page
 ```

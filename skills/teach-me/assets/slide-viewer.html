@@ -1,0 +1,60 @@
+<!-- Slide viewer for teach-me pages: click a slide to open it full-screen; click the open slide to toggle actual size
+     (scrollable); Esc, the close button or a click on the backdrop closes it. Works on every `figure img`.
+     Paste the <style> rules at the end of the page's <style> block (they use the page's --mono token),
+     and the <div> and <script> right after </main>, before the KaTeX script. -->
+
+<style>
+/* Slide viewer: click a slide to see it full-screen; click again for actual size. */
+figure img { cursor: zoom-in; }
+.lb { position: fixed; inset: 0; z-index: 50; background: rgba(10, 9, 7, .92); display: flex; flex-direction: column; overscroll-behavior: contain;
+  padding: max(12px, env(safe-area-inset-top, 0px)) max(12px, env(safe-area-inset-right, 0px)) max(12px, env(safe-area-inset-bottom, 0px)) max(12px, env(safe-area-inset-left, 0px)); }
+.lb-bar { display: flex; align-items: center; gap: 12px; color: #ece7dc; font-family: var(--mono); font-size: .8rem; padding-bottom: 8px; }
+.lb-bar span { flex: 1; min-width: 0; }
+.lb-close { background: none; border: 1px solid #6b6455; color: #ece7dc; border-radius: 4px; font-size: 1.1rem; line-height: 1; padding: 6px 10px; cursor: pointer; }
+.lb-close:focus-visible { outline: 2px solid #cfb991; outline-offset: 2px; }
+.lb-stage { flex: 1; min-height: 0; overflow: auto; display: flex; }
+.lb-stage img { margin: auto; max-width: 100%; max-height: 100%; background: #fff; border-radius: 3px; cursor: zoom-in; }
+.lb.full .lb-stage img { max-width: none; max-height: none; cursor: zoom-out; }
+body.lb-open { overflow: hidden; }
+</style>
+
+<div class="lb" id="lightbox" role="dialog" aria-modal="true" aria-label="Slide viewer" hidden>
+  <div class="lb-bar"><span id="lb-cap"></span><button class="lb-close" id="lb-close" type="button" aria-label="Close slide viewer">✕</button></div>
+  <div class="lb-stage" id="lb-stage"><img id="lb-img" alt=""></div>
+</div>
+<script>
+// Slide viewer: click a slide to open it full-screen; click the slide again to toggle actual size; Esc, ✕ or the backdrop closes.
+(function () {
+  var lb = document.getElementById("lightbox"), img = document.getElementById("lb-img"),
+      cap = document.getElementById("lb-cap"), stage = document.getElementById("lb-stage"),
+      closeBtn = document.getElementById("lb-close"), opener = null;
+  function open(src) {
+    opener = src;
+    img.src = src.currentSrc || src.src; img.alt = src.alt;
+    var b = src.closest("figure") && src.closest("figure").querySelector("figcaption b");
+    cap.textContent = (b ? b.textContent + " · " : "") + "click the slide to zoom";
+    lb.classList.remove("full"); lb.hidden = false; document.body.classList.add("lb-open"); closeBtn.focus();
+  }
+  function close() {
+    lb.hidden = true; document.body.classList.remove("lb-open");
+    if (opener) opener.focus({ preventScroll: true });
+  }
+  document.querySelectorAll("figure img").forEach(function (el) {
+    el.tabIndex = 0;
+    el.addEventListener("click", function () { open(el); });
+    el.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); open(el); } });
+  });
+  img.addEventListener("click", function (e) {
+    e.stopPropagation();
+    var full = lb.classList.toggle("full");
+    if (full) { // keep the clicked point roughly under the pointer
+      var r = img.getBoundingClientRect();
+      stage.scrollLeft = (img.naturalWidth - stage.clientWidth) * Math.min(1, Math.max(0, (e.clientX - r.left) / r.width));
+      stage.scrollTop = (img.naturalHeight - stage.clientHeight) * Math.min(1, Math.max(0, (e.clientY - r.top) / r.height));
+    }
+  });
+  stage.addEventListener("click", function (e) { if (e.target === stage) close(); });
+  closeBtn.addEventListener("click", close);
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape" && !lb.hidden) close(); });
+})();
+</script>
