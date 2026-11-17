@@ -1,0 +1,48 @@
+<!-- Clickable multiple choice for teach-me pages. Each option is a button labelled A, B, C… by CSS. The first click locks
+     the question: the reader's pick turns green (right) or red (wrong), every correct option turns green, and the
+     question's <details> explanation opens. data-answer lists the correct letters ("C", or "AB" for two correct).
+     Paste the <style> rules at the end of the page's <style> block (they use the page's --fg, --bg, --surface, --rule,
+     --accent, --accent-ink, --good, --good-bg, --bad, --bad-bg and --mono tokens), and the <script> right after </main>,
+     before the KaTeX script.
+
+     Markup for one question (options are written without their letters; the CSS adds them):
+
+  <div class="q"><p><span class="qn">Q16</span>Given a query Q, a search engine can just… <span class="kind">in class</span></p>
+  <ol class="mc" data-answer="C">
+    <li><button type="button">Rank pages by PageRank, ascending</button></li>
+    <li><button type="button">Rank pages by PageRank, descending</button></li>
+    <li><button type="button">Do something else</button></li>
+  </ol>
+  <details><summary>Show answer</summary><p><strong>C, do something else.</strong> Why…</p></details></div>
+-->
+
+<style>
+/* Multiple choice: click an option; right = green, wrong = red, the correct option is always revealed. */
+ol.mc { list-style: none; counter-reset: mc; padding: 0; margin: .5rem 0 .6rem; display: grid; gap: 6px; }
+ol.mc li { counter-increment: mc; }
+ol.mc button { display: flex; gap: 10px; align-items: baseline; width: 100%; text-align: left; font: inherit; color: var(--fg);
+  background: var(--bg); border: 1px solid var(--rule); border-radius: 6px; padding: 8px 12px; cursor: pointer; }
+ol.mc button::before { content: counter(mc, upper-alpha); font-family: var(--mono); font-weight: 600; color: var(--accent-ink); min-width: 1ch; }
+ol.mc button:hover:not(:disabled) { border-color: var(--accent); background: var(--surface); }
+ol.mc button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+ol.mc button:disabled { cursor: default; }
+ol.mc button.right { border-color: var(--good); background: var(--good-bg); }
+ol.mc button.wrong { border-color: var(--bad); background: var(--bad-bg); }
+ol.mc button.right::after { content: "✓ correct"; margin-left: auto; color: var(--good); font-weight: 700; white-space: nowrap; }
+ol.mc button.wrong::after { content: "✗ your pick"; margin-left: auto; color: var(--bad); font-weight: 700; white-space: nowrap; }
+</style>
+
+<script>
+// Multiple choice: lock the question on first click, colour the pick and the correct option(s), then open the explanation.
+document.querySelectorAll("ol.mc").forEach(function (ol) {
+  var ans = ol.dataset.answer, btns = ol.querySelectorAll("button");
+  btns.forEach(function (b, i) {
+    b.addEventListener("click", function () {
+      btns.forEach(function (x, j) { x.disabled = true; if (ans.indexOf("ABCDEFG"[j]) !== -1) x.classList.add("right"); });
+      if (ans.indexOf("ABCDEFG"[i]) === -1) b.classList.add("wrong");
+      var d = ol.parentElement.querySelector("details");
+      if (d) { d.open = true; var s = d.querySelector("summary"); if (s) s.textContent = "Explanation"; }
+    });
+  });
+});
+</script>

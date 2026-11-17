@@ -95,6 +95,7 @@ Before you write, call the Artifact tool's `quickstart` with `intent: "other"`, 
 - Callout boxes for: in-class moments (analogies, what the lecturer stressed), exam hints, and the tables or traces you computed yourself.
 - **Self-check questions go inside the lecture, not at the end.** Close each section with a short "Try it" block, so the reader learns an idea and immediately uses it while it's fresh. Write questions that make sense for this lecture and this idea: whatever would show the reader whether they actually understood it. Hide each answer behind a `<details>` toggle so the reader tries first, and number questions continuously across the page so they can be referred to.
   - If the lecture asked a question in class at this point, it belongs here, with the answer given in class hidden like the others.
+  - Make every multiple-choice question clickable, with the options as stacked buttons, never as "A. … B. …" inline in the question text. Use the markup, styles and script in `assets/multiple-choice.html` unchanged. Set `data-answer` to the correct letters ("AB" when two are right), write each option's full text from the slide, and keep the question's `<details>` explanation, which opens after the first click.
   - Questions can build on earlier sections, but never on something not yet taught.
 - End with **key takeaways** (a short list per part). If some problems only make sense once several sections are done, add a short **"Putting it together"** set for them; don't repeat the per-section questions there.
 

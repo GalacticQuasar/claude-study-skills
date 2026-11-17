@@ -87,5 +87,6 @@ skills/
   teach-me/
     SKILL.md
     assets/slide-viewer.html      # click-to-enlarge slide viewer pasted into every page
+    assets/multiple-choice.html   # clickable multiple-choice questions (green/red, reveals the answer)
     scripts/slides.sh             # slide contact sheets for picking, compressed PNGs for the page
 ```
